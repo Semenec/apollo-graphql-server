@@ -1,0 +1,36 @@
+version: '3'
+
+services:
+
+  # Data API and authentication/authorization
+  api:
+    image: api
+    build:
+      context: ./
+      args:
+        NODE_ENV: development
+    hostname: api
+    depends_on:
+      - db
+    ports:
+      - "8080:8080"
+      - "127.0.0.1:9229:9229" 
+      - "127.0.0.1:9230:9230"
+    command: yarn start
+
+  # SQL and document data store
+  db:
+    image: postgres:9.6.6-alpine
+    read_only: true
+    tmpfs:
+      - /tmp
+      - /var/run/postgresql
+    volumes:
+      - db:/var/lib/postgresql/data
+      - ./postgres-initdb.sh:/docker-entrypoint-initdb.d/initdb.sh
+    ports:
+      - "127.0.0.1:5432:5432" 
+
+volumes:
+  db:
+  yarn:
