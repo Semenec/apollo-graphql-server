@@ -1,28 +1,33 @@
 const bcrypt = require("bcrypt");
 
 module.exports = (sequelize, DataTypes) => {
-  const User = sequelize.define('User', {
-    firstName: DataTypes.STRING,
-    lastName: DataTypes.STRING,
-    email: {
-      field: 'email',
-      type: DataTypes.STRING,
-      unique: {
-        name: 'email',
-        msg: 'Email is already registered.'
+  const User = sequelize.define(
+    "User",
+    {
+      firstName: DataTypes.STRING,
+      lastName: DataTypes.STRING,
+      email: {
+        field: "email",
+        type: DataTypes.STRING,
+        unique: {
+          name: "email",
+          msg: "Email is already registered."
+        },
+        validate: {
+          isEmail: true
+        }
       },
-      validate: {
-        isEmail: true
-      }
+      password: DataTypes.STRING
     },
-    password: DataTypes.STRING
-  }, {});
-  User.associate = function (models) {
+    {}
+  );
+  User.associate = function(models) {
     // associations can be defined here
   };
 
-  User.beforeCreate((user) => {
-    return bcrypt.hash(user.password, 10)
+  User.beforeCreate(user => {
+    return bcrypt
+      .hash(user.password, 10)
       .then(hash => {
         user.password = hash;
       })

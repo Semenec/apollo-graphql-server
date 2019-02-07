@@ -1,4 +1,8 @@
-const { createUser, findOneUserByEmail, login } = require('../controllers/user')
+const {
+  createUser,
+  findOneUserByEmail,
+  login
+} = require("../controllers/user");
 
 const userResolver = {
   Query: {
